@@ -1,0 +1,118 @@
+module: ietf-nrp-policy
+
+  augment /nw:networks:
+    +--rw nrp-policies
+       +--rw nrp-policy* [name]
+          +--rw name                    string
+          +--rw nrp-id?                 uint32
+          +--rw resource-reservation
+          |  +--rw preference?                        uint16
+          |  +--rw (max-bw-type)?
+          |  |  +--:(bw-value)
+          |  |  |  +--rw maximum-bandwidth?           uint64
+          |  |  +--:(bw-percentage)
+          |  |     +--rw maximum-bandwidth-percent?
+          |  |             rt-types:percentage
+          |  +--rw shared-resource-groups*            uint32
+          |  +--rw protection
+          |     +--rw backup-nrp-id?                    uint32
+          |     +--rw (backup-bw-type)?
+          |        +--:(backup-bw-value)
+          |        |  +--rw backup-bandwidth?           uint64
+          |        +--:(backup-bw-percentage)
+          |           +--rw backup-bandwidth-percent?
+          |                   rt-types:percentage
+          +--rw flow-agg-selector
+          |  +--rw mpls
+          |  |  +--rw (fas-type)?
+          |  |     +--:(label)
+          |  |     |  +--rw (specification-type)?
+          |  |     |     +--:(derived)
+          |  |     |     |  +--rw forwarding-label?        empty
+          |  |     |     +--:(explicit)
+          |  |     |        +--rw label?
+          |  |     |        |       rt-types:mpls-label
+          |  |     |        +--rw label-position?
+          |  |     |        |       identityref
+          |  |     |        +--rw label-position-offset?   uint8
+          |  |     +--:(label-ranges)
+          |  |        +--rw label-range* [index]
+          |  |           +--rw index                    string
+          |  |           +--rw start-label?
+          |  |           |       rt-types:mpls-label
+          |  |           +--rw end-label?
+          |  |           |       rt-types:mpls-label
+          |  |           +--rw label-position?          identityref
+          |  |           +--rw label-position-offset?   uint8
+          |  +--rw ipv4
+          |  |  +--rw destination-prefix*   inet:ipv4-prefix
+          |  +--rw ipv6
+          |  |  +--rw (fas-type)?
+          |  |     +--:(ipv6-destination)
+          |  |     |  +--rw destination-prefix*   inet:ipv6-prefix
+          |  |     +--:(ipv6-hbh-eh)
+          |  |        +--rw fas-hbh-eh*           uint32
+          |  +--rw acl-ref*   nrp-policy-acl-ref
+          +--rw phb?                    string
+          +--rw topology
+             +--rw filters
+                +--rw filter* [filter-ref]
+                   +--rw filter-ref
+                   |       nrp-policy-topo-filter-ref
+                   +--rw resource-reservation
+                   |  +--rw preference?                        uint16
+                   |  +--rw (max-bw-type)?
+                   |  |  +--:(bw-value)
+                   |  |  |  +--rw maximum-bandwidth?           uint64
+                   |  |  +--:(bw-percentage)
+                   |  |     +--rw maximum-bandwidth-percent?
+                   |  |             rt-types:percentage
+                   |  +--rw shared-resource-groups*            uint32
+                   |  +--rw protection
+                   |     +--rw backup-nrp-id?
+                   |     |       uint32
+                   |     +--rw (backup-bw-type)?
+                   |        +--:(backup-bw-value)
+                   |        |  +--rw backup-bandwidth?
+                   |        |          uint64
+                   |        +--:(backup-bw-percentage)
+                   |           +--rw backup-bandwidth-percent?
+                   |                   rt-types:percentage
+                   +--rw flow-agg-selector
+                   |  +--rw mpls
+                   |  |  +--rw (fas-type)?
+                   |  |     +--:(label)
+                   |  |     |  +--rw (specification-type)?
+                   |  |     |     +--:(derived)
+                   |  |     |     |  +--rw forwarding-label?
+                   |  |     |     |          empty
+                   |  |     |     +--:(explicit)
+                   |  |     |        +--rw label?
+                   |  |     |        |       rt-types:mpls-label
+                   |  |     |        +--rw label-position?
+                   |  |     |        |       identityref
+                   |  |     |        +--rw label-position-offset?
+                   |  |     |                uint8
+                   |  |     +--:(label-ranges)
+                   |  |        +--rw label-range* [index]
+                   |  |           +--rw index
+                   |  |           |       string
+                   |  |           +--rw start-label?
+                   |  |           |       rt-types:mpls-label
+                   |  |           +--rw end-label?
+                   |  |           |       rt-types:mpls-label
+                   |  |           +--rw label-position?
+                   |  |           |       identityref
+                   |  |           +--rw label-position-offset?
+                   |  |                   uint8
+                   |  +--rw ipv4
+                   |  |  +--rw destination-prefix*   inet:ipv4-prefix
+                   |  +--rw ipv6
+                   |  |  +--rw (fas-type)?
+                   |  |     +--:(ipv6-destination)
+                   |  |     |  +--rw destination-prefix*
+                   |  |     |          inet:ipv6-prefix
+                   |  |     +--:(ipv6-hbh-eh)
+                   |  |        +--rw fas-hbh-eh*           uint32
+                   |  +--rw acl-ref*   nrp-policy-acl-ref
+                   +--rw phb?                    string
